@@ -232,6 +232,13 @@ This is a community fork. For issues or questions, please open a GitHub issue.
                     <sub><b>funkypenguin</b></sub>
                 </a>
             </td>
+			<td align="center">
+                <a href="https://github.com/mathiasmortus">
+                    <img src="https://avatars.githubusercontent.com/u/77238760?v=4" width="64;" alt="mortus"/>
+                    <br />
+                    <sub><b>mortus</b></sub>
+                </a>
+            </td>
             <td align="center">
                 <a href="https://github.com/sirstudly">
                     <img src="https://avatars.githubusercontent.com/u/12377354?v=4" width="64;" alt="sirstudly"/>
