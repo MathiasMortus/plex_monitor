@@ -64,23 +64,44 @@ On first run, you'll be prompted to configure:
 
 ## Usage
 
-### Running the Service
+### Option 1: Web UI Configuration (Recommended for Docker/Unraid)
+
+Start the web configuration interface:
+
+```bash
+python webui.py
+```
+
+Then open your browser to `http://localhost:5000` to configure plex_monitor through a user-friendly web interface.
+
+Features:
+- ✅ Easy form-based configuration
+- ✅ Test Sonarr/Radarr connections
+- ✅ View configuration status
+- ✅ Perfect for Docker/Unraid deployments
+
+### Option 2: Terminal Menu
+
+For local/interactive setups:
 
 ```bash
 python main.py
 ```
 
-Or run as a background service:
+Menu Options:
+1. **Run**: Start monitoring watchlists
+2. **Settings**: Configure Sonarr, Radarr, Plex, and other services
+3. **Ignored Media**: View and manage ignored items
+
+### Option 3: Service Mode (Background)
+
+For automated/production use:
 
 ```bash
 python main.py -service
 ```
 
-### Menu Options
-
-1. **Run**: Start monitoring watchlists
-2. **Settings**: Configure Sonarr, Radarr, Plex, and other services
-3. **Ignored Media**: View and manage ignored items
+This runs continuously without user interaction, perfect for Docker containers.
 
 ## Features
 
@@ -131,6 +152,54 @@ If you're migrating from the original plex_debrid:
 - Check that items have been released (not future releases)
 - Verify library checking isn't marking them as already collected
 - Check debug logs: Settings → UI Settings → Debug printing → true
+
+## Docker / Unraid Setup
+
+### Initial Setup with Web UI
+
+1. **Start the web configuration interface**:
+   ```bash
+   docker run -d \
+     --name plex-monitor-config \
+     -p 5000:5000 \
+     -v /path/to/config:/app \
+     your-image python webui.py
+   ```
+
+2. **Configure via browser**:
+   - Open `http://your-server:5000`
+   - Enter your Plex token, Sonarr/Radarr URLs and API keys
+   - Test connections
+   - Save configuration
+
+3. **Stop the web UI and start the service**:
+   ```bash
+   docker stop plex-monitor-config
+   docker run -d \
+     --name plex-monitor \
+     --restart unless-stopped \
+     -v /path/to/config:/app \
+     your-image python main.py -service
+   ```
+
+### Unraid Template
+
+```xml
+<Container version="2">
+  <Name>plex-monitor</Name>
+  <Repository>your-image</Repository>
+  <Config Name="Config Directory" Target="/app" Default="/mnt/user/appdata/plex_monitor" Mode="rw" Description="Config directory" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/plex_monitor</Config>
+  <Config Name="Web UI Port (for setup)" Target="5000" Default="5000" Mode="tcp" Description="Web UI port" Type="Port" Display="always" Required="false" Mask="false">5000</Config>
+  <PostArgs>python main.py -service</PostArgs>
+</Container>
+```
+
+**Setup Steps**:
+1. Install the container with `PostArgs: python webui.py`
+2. Open Web UI at `http://your-server:5000` and configure
+3. Stop container
+4. Change `PostArgs` to `python main.py -service`
+5. Start container - it will now run in background monitoring mode
 
 ## Environment Variables
 
