@@ -1,3 +1,4 @@
+![banner](https://i.imgur.com/Rk8khjF.png)
 # Ocularr
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](VERSION.md)
